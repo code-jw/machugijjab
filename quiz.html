@@ -1,0 +1,76 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>퀴즈 상세 페이지</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
+  <link rel="stylesheet" href="style.css">
+</head>
+<body class="quiz-page-body">
+
+  <div class="app-container quiz-detail-layout">
+    
+    <!-- 왼쪽 메인 퀴즈 영역 -->
+    <div class="quiz-detail-left">
+      <!-- 퀴즈 이미지 -->
+      <div class="detail-image-wrapper">
+        <img id="detailImg" src="" alt="퀴즈 이미지">
+      </div>
+
+      <!-- 퀴즈 정보 -->
+      <div class="detail-info-box">
+        <h2 id="detailTitle">포켓몬 이름 맞추기 (1~9세대)</h2>
+        <p id="detailDesc">포켓몬스터 1세대부터 9세대까지의 포켓몬을 사진을 보고 맞춘다.<br><br>문의는 댓글로</p>
+      </div>
+
+      <!-- 타이머 설정 -->
+      <div class="timer-container">
+        <div class="timer-line"></div>
+        <div class="timer-options">
+          <div class="timer-node active">
+            <div class="node-circle"></div>
+            <div class="node-label active-label">타이머 X</div>
+          </div>
+          <div class="timer-node">
+            <div class="node-circle"></div>
+            <div class="node-label">3초</div>
+          </div>
+          <div class="timer-node">
+            <div class="node-circle"></div>
+            <div class="node-label">5초</div>
+          </div>
+          <div class="timer-node">
+            <div class="node-circle"></div>
+            <div class="node-label">10초</div>
+          </div>
+          <div class="timer-node">
+            <div class="node-circle"></div>
+            <div class="node-label">30초</div>
+          </div>
+        </div>
+      </div>
+
+      <!-- 문제 개수 선택 버튼들 -->
+      <div class="play-buttons">
+        <button class="btn-play">10개 풀기</button>
+        <button class="btn-play">20개 풀기</button>
+        <button class="btn-play">30개 풀기</button>
+        <button class="btn-play">50개 풀기</button>
+      </div>
+    </div>
+
+    <!-- 오른쪽 추천 퀴즈 영역 -->
+    <div class="quiz-detail-right">
+      <h3 class="recommend-title">오늘의 추천 퀴즈는?</h3>
+      <div class="recommend-list" id="recommendList">
+        <!-- 동적으로 추천 퀴즈가 들어갑니다 -->
+      </div>
+    </div>
+  </div>
+
+  <script src="quiz.js"></script>
+</body>
+</html>
