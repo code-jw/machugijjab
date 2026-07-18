@@ -4,65 +4,105 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>맞추기 플랫폼 - Machugi Clone</title>
-  <!-- 구글 폰트 (Noto Sans KR) -->
   <link rel="preconnect" href="https://fonts.googleapis.com">
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
   <link href="https://fonts.googleapis.com/css2?family=Noto+Sans+KR:wght@400;500;700&display=swap" rel="stylesheet">
-  <!-- FontAwesome 아이콘 라이브러리 -->
   <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
-  <!-- CSS 파일 연결 -->
   <link rel="stylesheet" href="style.css">
 </head>
 <body>
 
   <div class="app-container">
-    <!-- 상단 검색바 영역 -->
-    <header class="search-header">
-      <div class="search-wrapper">
-        <button class="filter-btn" aria-label="필터">
-          <i class="fa-solid fa-sliders"></i>
-        </button>
-        <div class="input-relative">
-          <input type="text" id="searchInput" placeholder="검색어를 입력하세요.">
-          <button class="search-submit-btn" aria-label="검색">
-            <i class="fa-solid fa-magnifying-glass"></i>
-          </button>
+    
+    <!-- 메인 뷰 (기존 리스트 화면) -->
+    <div id="mainView">
+      <!-- 상단 검색바 영역 -->
+      <header class="search-header">
+        <div class="search-wrapper">
+          <button class="filter-btn" aria-label="필터"><i class="fa-solid fa-sliders"></i></button>
+          <div class="input-relative">
+            <input type="text" id="searchInput" placeholder="검색어를 입력하세요.">
+            <button class="search-submit-btn" aria-label="검색"><i class="fa-solid fa-magnifying-glass"></i></button>
+          </div>
+        </div>
+      </header>
+
+      <!-- 카테고리 네비게이션 바 -->
+      <nav class="category-nav">
+        <div class="category-scroll-box" id="categoryBox">
+          <button class="category-tab" data-category="all"><span>🎛️</span>전체</button>
+          <button class="category-tab" data-category="game"><span>🎮</span>게임</button>
+          <button class="category-tab" data-category="music"><span>🎵</span>음악</button>
+          <button class="category-tab" data-category="culture"><span>🎬</span>문화</button>
+          <button class="category-tab active" data-category="broadcast"><span>📺</span>방송</button>
+          <button class="category-tab" data-category="knowledge"><span>📖</span>상식</button>
+          <button class="category-tab" data-category="toon"><span>💬</span>만화</button>
+          <button class="category-tab" data-category="food"><span>🍏</span>음식</button>
+          <button class="category-tab" data-category="people"><span>👤</span>인물</button>
+          <button class="category-tab" data-category="sports"><span>⚽</span>스포츠</button>
+          <button class="category-tab" data-category="meme"><span>🤪</span>병맛</button>
+        </div>
+      </nav>
+
+      <!-- 퀴즈 카드 그리드 메인 영역 -->
+      <main class="main-content">
+        <div class="quiz-grid" id="quizGrid"></div>
+        <div class="no-result" id="noResult">검색 결과에 맞는 퀴즈가 없습니다.</div>
+      </main>
+
+      <!-- 하단 탑 버튼 -->
+      <button id="scrollTopBtn" class="scroll-top-btn" aria-label="맨 위로 가기">
+        <i class="fa-solid fa-chevron-up"></i>
+      </button>
+    </div>
+
+    <!-- 상세 뷰 (새로 추가된 영역, image_b7fb17.png 형태) -->
+    <div id="detailView" style="display: none;">
+      <button id="backBtn" class="back-btn"><i class="fa-solid fa-arrow-left"></i> 목록으로</button>
+      
+      <div class="detail-layout">
+        <!-- 왼쪽: 퀴즈 메인 정보 및 플레이 버튼 -->
+        <div class="detail-left">
+          <div class="detail-img-box">
+            <img id="detailImg" src="" alt="퀴즈 이미지">
+          </div>
+          
+          <div class="detail-info-box">
+            <h2 id="detailTitle">퀴즈 제목</h2>
+            <p id="detailDesc">퀴즈 설명</p>
+          </div>
+
+          <div class="detail-timer-box">
+            <div class="timer-line"></div>
+            <div class="timer-options">
+              <div class="timer-opt active">타이머 X</div>
+              <div class="timer-opt">3초</div>
+              <div class="timer-opt">5초</div>
+              <div class="timer-opt">10초</div>
+              <div class="timer-opt">30초</div>
+            </div>
+          </div>
+
+          <div class="detail-play-buttons">
+            <button class="play-btn">10개 풀기</button>
+            <button class="play-btn">20개 풀기</button>
+            <button class="play-btn">30개 풀기</button>
+            <button class="play-btn">50개 풀기</button>
+          </div>
+        </div>
+
+        <!-- 오른쪽: 추천 퀴즈 사이드바 -->
+        <div class="detail-right">
+          <h3 class="recommend-title">오늘의 추천 퀴즈는?</h3>
+          <div class="recommend-list" id="recommendList">
+            <!-- 자바스크립트로 추천 리스트 생성 -->
+          </div>
         </div>
       </div>
-    </header>
+    </div>
 
-    <!-- 카테고리 네비게이션 바 -->
-    <nav class="category-nav">
-      <div class="category-scroll-box" id="categoryBox">
-        <button class="category-tab" data-category="all"><span>🎛️</span>전체</button>
-        <button class="category-tab" data-category="game"><span>🎮</span>게임</button>
-        <button class="category-tab" data-category="music"><span>🎵</span>음악</button>
-        <button class="category-tab" data-category="culture"><span>🎬</span>문화</button>
-        <button class="category-tab" data-category="broadcast" class="active"><span>📺</span>방송</button>
-        <button class="category-tab" data-category="knowledge"><span>📖</span>상식</button>
-        <button class="category-tab" data-category="toon"><span>💬</span>만화</button>
-        <button class="category-tab" data-category="food"><span>🍏</span>음식</button>
-        <button class="category-tab" data-category="people"><span>👤</span>인물</button>
-        <button class="category-tab" data-category="sports"><span>⚽</span>스포츠</button>
-        <button class="category-tab" data-category="meme"><span>🤪</span>병맛</button>
-      </div>
-    </nav>
-
-    <!-- 퀴즈 카드 그리드 메인 영역 -->
-    <main class="main-content">
-      <div class="quiz-grid" id="quizGrid">
-        <!-- 자바스크립트에 의해 동적으로 카드가 생성됩니다. -->
-      </div>
-      <div class="no-result" id="noResult">검색 결과에 맞는 퀴즈가 없습니다.</div>
-    </main>
-
-    <!-- 하단 탑 버튼 -->
-    <button id="scrollTopBtn" class="scroll-top-btn" aria-label="맨 위로 가기">
-      <i class="fa-solid fa-chevron-up"></i>
-    </button>
   </div>
 
-  <!-- 자바스크립트 파일 연결 -->
   <script src="script.js"></script>
 </body>
 </html>
