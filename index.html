@@ -3,25 +3,150 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>포켓몬 퀴즈 - 메인</title>
-    <!-- Tailwind CSS (유틸리티 클래스) -->
+    <title>퀴즈 모음 - 메인</title>
+    <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- 분리된 CSS 연결 -->
-    <link rel="stylesheet" href="style.css">
+    <!-- FontAwesome -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <style>
+        @import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
+        
+        body {
+            font-family: 'Pretendard', sans-serif;
+            background-color: #37418b; /* 이미지와 유사한 배경색 */
+            min-height: 100vh;
+            margin: 0;
+            padding: 2rem;
+        }
+
+        /* 텍스트 말줄임표 처리 */
+        .line-clamp-2 {
+            display: -webkit-box;
+            -webkit-line-clamp: 2;
+            -webkit-box-orient: vertical;  
+            overflow: hidden;
+        }
+
+        /* 스크롤바 숨기기 (카테고리 영역) */
+        .no-scrollbar::-webkit-scrollbar {
+            display: none;
+        }
+        .no-scrollbar {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
+    </style>
 </head>
 <body>
-    <div class="bg-shape bg-shape-1"></div>
-    <div class="bg-shape bg-shape-2"></div>
-    
-    <div class="flex flex-col items-center">
-        <div class="w-64 h-64 mb-8 drop-shadow-2xl">
-            <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/items/poke-ball.png" alt="몬스터볼" class="w-full h-full object-contain animate-bounce" style="animation-duration: 2s;">
-        </div>
-        <h1 class="text-white text-5xl font-extrabold mb-12 tracking-widest drop-shadow-lg">포켓몬 이름 맞추기</h1>
+    <div class="max-w-7xl mx-auto">
         
-        <button onclick="location.href='quiz.html'" class="bg-[#8640f1] hover:bg-[#7435d6] text-white px-10 py-4 rounded-xl font-bold text-2xl shadow-lg transition-all transform hover:scale-105">
-            10개 풀기
-        </button>
+        <!-- 상단 검색바 영역 -->
+        <div class="flex items-center gap-3 mb-6">
+            <button class="w-12 h-12 bg-white rounded-full flex items-center justify-center text-gray-500 shadow-sm flex-shrink-0">
+                <i class="fa-solid fa-filter"></i>
+            </button>
+            <div class="flex-grow relative flex items-center">
+                <input type="text" placeholder="검색어를 입력하세요." class="w-full h-12 rounded-full pl-6 pr-14 outline-none text-gray-700 shadow-sm">
+                <button class="absolute right-0 w-14 h-12 bg-[#8640f1] hover:bg-[#7435d6] rounded-r-full text-white transition-colors flex items-center justify-center">
+                    <i class="fa-solid fa-magnifying-glass"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- 카테고리 영역 -->
+        <div class="flex gap-3 mb-8 overflow-x-auto no-scrollbar pb-2">
+            <!-- 활성화된 탭 -->
+            <button class="flex items-center gap-2 px-5 py-2.5 bg-white rounded-lg font-bold text-gray-800 shadow-sm whitespace-nowrap">
+                <i class="fa-solid fa-border-all text-yellow-400"></i> 전체
+            </button>
+            <!-- 비활성화된 탭들 -->
+            <script>
+                const categories = ['게임', '음악', '문화', '방송', '상식', '만화', '음식', '인물', '스포츠', '병맛'];
+                categories.forEach(cat => {
+                    document.write(`
+                        <button class="flex items-center gap-2 px-5 py-2.5 bg-white/10 hover:bg-white/20 border border-white/20 rounded-lg text-white whitespace-nowrap transition-colors">
+                            <i class="fa-solid fa-gamepad text-gray-300"></i> ${cat}
+                        </button>
+                    `);
+                });
+            </script>
+        </div>
+
+        <!-- 퀴즈 카드 그리드 -->
+        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-5">
+            
+            <!-- 1. 포켓몬 퀴즈 (클릭 시 quiz.html로 이동) -->
+            <div onclick="location.href='quiz.html'" class="bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform hover:-translate-y-1 hover:shadow-xl">
+                <div class="relative h-48 bg-gray-200">
+                    <img src="https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png" alt="피카츄" class="w-full h-full object-cover">
+                    <!-- 오버레이 뱃지들 -->
+                    <div class="absolute bottom-2 left-2 text-white text-xs font-bold bg-black/40 px-2 py-1 rounded">
+                        ▶ 3.6M
+                    </div>
+                    <div class="absolute bottom-2 right-2 flex flex-col gap-1 items-end">
+                        <div class="w-6 h-6 bg-green-500 rounded text-white flex items-center justify-center text-xs">
+                            <i class="fa-regular fa-image"></i>
+                        </div>
+                        <div class="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">
+                            주관식
+                        </div>
+                    </div>
+                </div>
+                <div class="p-4 h-32">
+                    <h3 class="font-bold text-gray-900 mb-1 truncate">포켓몬 이름 맞추기 (1~9세대)</h3>
+                    <p class="text-xs text-gray-500 line-clamp-2">포켓몬스터 1세대부터 9세대까지의 포켓몬을 사진을 보고 맞춘다. 문의는 댓글로</p>
+                </div>
+            </div>
+
+            <!-- 2. 더미 카드 (클릭 시 알림창) -->
+            <div onclick="alert('현재 포켓몬 퀴즈만 이용 가능합니다!')" class="bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform hover:-translate-y-1 hover:shadow-xl">
+                <div class="relative h-48 bg-gray-300">
+                    <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/0/09/Flag_of_South_Korea.svg/800px-Flag_of_South_Korea.svg.png" alt="태극기" class="w-full h-full object-cover">
+                    <div class="absolute bottom-2 left-2 text-white text-xs font-bold bg-black/40 px-2 py-1 rounded">▶ 298.7K</div>
+                    <div class="absolute bottom-2 right-2 flex flex-col gap-1 items-end">
+                        <div class="w-6 h-6 bg-green-500 rounded text-white flex items-center justify-center text-xs"><i class="fa-regular fa-image"></i></div>
+                        <div class="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">주관식</div>
+                    </div>
+                </div>
+                <div class="p-4 h-32">
+                    <h3 class="font-bold text-gray-900 mb-1 truncate">한개도 못맞추면 한국인 아님</h3>
+                    <p class="text-xs text-gray-500 line-clamp-2">설명없는게 설명임</p>
+                </div>
+            </div>
+
+            <!-- 3. 더미 카드 -->
+            <div onclick="alert('현재 포켓몬 퀴즈만 이용 가능합니다!')" class="bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform hover:-translate-y-1 hover:shadow-xl">
+                <div class="relative h-48 bg-[#d8f1e9] flex items-center justify-center">
+                    <i class="fa-solid fa-earth-americas text-6xl text-gray-400"></i>
+                    <div class="absolute bottom-2 left-2 text-white text-xs font-bold bg-black/40 px-2 py-1 rounded">▶ 4.5M</div>
+                    <div class="absolute bottom-2 right-2 flex flex-col gap-1 items-end">
+                        <div class="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">주관식</div>
+                    </div>
+                </div>
+                <div class="p-4 h-32">
+                    <h3 class="font-bold text-gray-900 mb-1 truncate">국기 보고 나라 맞히기</h3>
+                    <p class="text-xs text-gray-500 line-clamp-2">국기만 보고, 어떤 나라의 국기인지 맞히는 퀴즈입니다.</p>
+                </div>
+            </div>
+
+            <!-- 4. 더미 카드 -->
+            <div onclick="alert('현재 포켓몬 퀴즈만 이용 가능합니다!')" class="bg-white rounded-2xl overflow-hidden shadow-lg cursor-pointer transform transition-transform hover:-translate-y-1 hover:shadow-xl">
+                <div class="relative h-48 bg-[#fcd4db] flex items-center justify-center">
+                    <i class="fa-solid fa-wand-magic-sparkles text-5xl text-pink-400"></i>
+                    <div class="absolute bottom-2 left-2 text-white text-xs font-bold bg-black/40 px-2 py-1 rounded">▶ 31.7M</div>
+                    <div class="absolute bottom-2 right-2 flex flex-col gap-1 items-end">
+                        <div class="w-6 h-6 bg-green-500 rounded text-white flex items-center justify-center text-xs"><i class="fa-regular fa-image"></i></div>
+                        <div class="bg-blue-500 text-white text-[10px] font-bold px-2 py-0.5 rounded">주관식</div>
+                    </div>
+                </div>
+                <div class="p-4 h-32">
+                    <h3 class="font-bold text-gray-900 mb-1 truncate">캐치 티니핑 이름 맞추기</h3>
+                    <p class="text-xs text-gray-500 line-clamp-2">나무위키 기준 진돌 다시 왔다감</p>
+                </div>
+            </div>
+
+        </div>
     </div>
 </body>
 </html>
