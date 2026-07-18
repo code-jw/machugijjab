@@ -1,237 +1,51 @@
-/* 공통 스타일 및 기존 index.html 스타일 */
-* { margin: 0; padding: 0; box-sizing: border-box; }
-body { font-family: 'Noto Sans KR', sans-serif; background-color: #3b3a74; color: #ffffff; min-height: 100vh; overflow-y: scroll; }
-.app-container { max-width: 1200px; margin: 0 auto; padding: 20px; }
+@import url('https://cdn.jsdelivr.net/gh/orioncactus/pretendard/dist/web/static/pretendard.css');
 
-/* 기존 index 스타일 요약 */
-.search-header { padding: 24px 0 16px 0; }
-.search-wrapper { display: flex; align-items: center; gap: 12px; background-color: rgba(255, 255, 255, 0.1); padding: 12px; border-radius: 16px; }
-.input-relative { position: relative; flex: 1; }
-#searchInput { width: 100%; padding: 12px 20px; border-radius: 50px; border: none; outline: none; }
-.category-nav { margin-bottom: 32px; overflow-x: auto; }
-.category-scroll-box { display: flex; gap: 8px; }
-.category-tab { padding: 10px 20px; border-radius: 12px; border: 1px solid transparent; background-color: rgba(255, 255, 255, 0.1); color: #e5e7eb; cursor: pointer; }
-.category-tab.active { background-color: #ffffff; color: #2c2663; }
-.quiz-grid { display: grid; grid-template-columns: repeat(auto-fill, minmax(250px, 1fr)); gap: 24px; }
-.quiz-card { background-color: #ffffff; border-radius: 16px; overflow: hidden; color: #374151; cursor: pointer; }
-.card-top { height: 180px; }
-.card-top img { width: 100%; height: 100%; object-fit: cover; }
-.card-bottom { padding: 16px; }
-
-/* =======================================
-   새로운 quiz.html 전용 스타일
-======================================= */
-.quiz-page-body {
-  background-color: #35387e; /* 이미지 배경색과 유사하게 매칭 */
+body {
+    font-family: 'Pretendard', sans-serif;
+    background-color: #37418b;
+    overflow: hidden;
+    margin: 0;
+    height: 100vh;
+    display: flex;
+    align-items: center;
+    justify-content: center;
 }
 
-.quiz-detail-layout {
-  display: flex;
-  flex-direction: column;
-  gap: 40px;
-  margin-top: 40px;
+.bg-shape {
+    position: absolute;
+    background: rgba(255, 255, 255, 0.04);
+    border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%;
+    z-index: -1;
+    animation: morph 8s ease-in-out infinite both alternate;
 }
 
-@media (min-width: 1024px) {
-  .quiz-detail-layout {
-    flex-direction: row;
-    align-items: flex-start;
-  }
+.bg-shape-1 {
+    width: 800px;
+    height: 800px;
+    bottom: -300px;
+    left: -200px;
 }
 
-/* 왼쪽 영역 */
-.quiz-detail-left {
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 24px;
+.bg-shape-2 {
+    width: 600px;
+    height: 600px;
+    top: -200px;
+    right: -100px;
+    background: rgba(255, 255, 255, 0.03);
+    border-radius: 60% 40% 30% 70% / 60% 30% 70% 40%;
 }
 
-.detail-image-wrapper {
-  width: 100%;
-  max-width: 320px;
-  background-color: white;
-  padding: 10px;
-  border-radius: 8px;
-  box-shadow: 0 10px 20px rgba(0,0,0,0.2);
+@keyframes morph {
+    0%, 100% { border-radius: 40% 60% 70% 30% / 40% 50% 60% 50%; }
+    34% { border-radius: 70% 30% 50% 50% / 30% 30% 70% 70%; }
+    67% { border-radius: 100% 60% 60% 100% / 100% 100% 60% 60%; }
 }
 
-.detail-image-wrapper img {
-  width: 100%;
-  height: auto;
-  aspect-ratio: 1/1;
-  object-fit: cover;
+.pokemon-img {
+    filter: drop-shadow(0px 10px 15px rgba(0,0,0,0.4));
+    transition: transform 0.3s ease;
 }
 
-.detail-info-box {
-  width: 100%;
-  max-width: 700px;
-  background-color: #262740;
-  border-radius: 8px;
-  padding: 40px 20px;
-  text-align: center;
-  box-shadow: 0 4px 10px rgba(0,0,0,0.3);
-}
-
-.detail-info-box h2 {
-  font-size: 20px;
-  font-weight: 700;
-  margin-bottom: 20px;
-}
-
-.detail-info-box p {
-  font-size: 14px;
-  color: #d1d5db;
-  line-height: 1.5;
-}
-
-/* 타이머 진행바 */
-.timer-container {
-  width: 100%;
-  max-width: 600px;
-  position: relative;
-  margin: 30px 0;
-  padding: 0 20px;
-}
-
-.timer-line {
-  position: absolute;
-  top: 8px;
-  left: 40px;
-  right: 40px;
-  height: 3px;
-  background-color: #cbd5e1;
-  z-index: 1;
-}
-
-.timer-options {
-  display: flex;
-  justify-content: space-between;
-  position: relative;
-  z-index: 2;
-}
-
-.timer-node {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  gap: 12px;
-  cursor: pointer;
-}
-
-.node-circle {
-  width: 18px;
-  height: 18px;
-  border-radius: 50%;
-  background-color: #cbd5e1;
-  border: 4px solid #35387e; /* 배경색으로 테두리 덮기 */
-  transition: 0.2s;
-}
-
-.timer-node.active .node-circle {
-  background-color: #e11d48;
-}
-
-.node-label {
-  background-color: #e2e8f0;
-  color: #475569;
-  padding: 6px 14px;
-  border-radius: 6px;
-  font-size: 12px;
-  font-weight: bold;
-}
-
-.node-label.active-label {
-  background-color: #e11d48;
-  color: white;
-}
-
-/* 플레이 버튼 */
-.play-buttons {
-  display: flex;
-  flex-wrap: wrap;
-  gap: 20px;
-  justify-content: center;
-  width: 100%;
-}
-
-.btn-play {
-  background-color: #7c3aed;
-  color: white;
-  border: none;
-  padding: 18px 0;
-  width: 140px;
-  border-radius: 8px;
-  font-size: 16px;
-  font-weight: bold;
-  cursor: pointer;
-  transition: 0.2s;
-}
-
-.btn-play:hover { background-color: #6d28d9; transform: translateY(-3px); }
-
-/* 오른쪽 영역 (추천 퀴즈) */
-.quiz-detail-right {
-  width: 100%;
-  background-color: #27283c;
-  padding: 24px;
-  border-radius: 12px;
-}
-
-@media (min-width: 1024px) {
-  .quiz-detail-right { width: 380px; flex-shrink: 0; }
-}
-
-.recommend-title {
-  font-size: 16px;
-  margin-bottom: 20px;
-}
-
-.recommend-list {
-  display: flex;
-  flex-direction: column;
-  gap: 16px;
-}
-
-.rec-card {
-  display: flex;
-  background-color: #ffffff;
-  border-radius: 6px;
-  overflow: hidden;
-  height: 100px;
-  color: #1e293b;
-  cursor: pointer;
-}
-
-.rec-card img {
-  width: 100px;
-  height: 100px;
-  object-fit: cover;
-}
-
-.rec-info {
-  padding: 12px;
-  flex: 1;
-  display: flex;
-  flex-direction: column;
-  justify-content: center;
-}
-
-.rec-info h4 {
-  font-size: 14px;
-  margin-bottom: 6px;
-  display: -webkit-box;
-  -webkit-line-clamp: 1;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
-}
-
-.rec-info p {
-  font-size: 12px;
-  color: #64748b;
-  display: -webkit-box;
-  -webkit-line-clamp: 2;
-  -webkit-box-orient: vertical;
-  overflow: hidden;
+.pokemon-img:hover {
+    transform: scale(1.05) translateY(-10px);
 }
