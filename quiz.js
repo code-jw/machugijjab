@@ -1,53 +1,153 @@
-// 임시 데이터 (실제로는 서버나 localStorage에서 가져옴)
-const QUIZ_DATA = [
-  { id: 1, title: '포켓몬 이름 맞추기 (1~9세대)', category: 'game', description: '포켓몬스터 1세대부터 9세대까지의 포켓몬을 사진을 보고 맞춘다.\n\n문의는 댓글로', plays: '553.6K', type: '주관식', image: 'https://images.unsplash.com/photo-1613771404784-3a5686aa2be3?w=500&q=80' },
-  { id: 2, title: '유튜버 이름 맞추기', category: 'broadcast', description: '*이미지를 보고 유튜버의 이름을 맞추면 되는 심플한 게임입니다.*', plays: '3.1M', type: '주관식', image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?w=500&q=80' },
-  { id: 3, title: '여자 아이돌 인물퀴즈', category: 'music', description: '여자 아이돌 인물퀴즈 제작자: cc 그룹 추가 요청은 댓글로 부탁드립니다.', plays: '539.4K', type: '주관식', image: 'https://images.unsplash.com/photo-1529156069898-49953e39b3ac?w=500&q=80' },
-  { id: 4, title: '캐치 티니핑 티니핑 맞추기', category: 'toon', description: '나무위키 기준 진도 다시 왔다감 (그래도 모른다)\n(2025-12-15일 연말 업뎃)', plays: '43.4K', type: '주관식', image: 'https://images.unsplash.com/photo-1542751371-adc38448a05e?w=500&q=80' },
-  { id: 5, title: '초성보고 애니 제목 맞추기', category: 'toon', description: '초성은 풀네임 기준으로 넣었으니 정답 입력할 때도 되도록 풀네임으로 적어주세요.', plays: '399.6K', type: '주관식', image: 'https://images.unsplash.com/photo-1534528741775-53994a69daeb?w=500&q=80' },
-  { id: 6, title: '포켓몬 이름 맞추기(1~4세대)', category: 'game', description: '- 포켓몬의 그림을 보고 이름을 맞추세요. - 한국 명칭만 정답으로 인정됩니다.', plays: '198.9K', type: '주관식', image: 'https://images.unsplash.com/photo-1553481187-be93c21490a9?w=500&q=80' },
+const POKEMON_DATA = [
+    { id: 448, name: '루카리오', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/448.png' },
+    { id: 34, name: '니드킹', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/34.png' },
+    { id: 25, name: '피카츄', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/25.png' },
+    { id: 6, name: '리자몽', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/6.png' },
+    { id: 143, name: '잠만보', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/143.png' },
+    { id: 133, name: '이브이', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/133.png' },
+    { id: 94, name: '팬텀', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/94.png' },
+    { id: 150, name: '뮤츠', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/150.png' },
+    { id: 393, name: '팽도리', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/393.png' },
+    { id: 1, name: '이상해씨', img: 'https://raw.githubusercontent.com/PokeAPI/sprites/master/sprites/pokemon/other/official-artwork/1.png' }
 ];
 
-// URL에서 ID 추출
-const urlParams = new URLSearchParams(window.location.search);
-const quizId = parseInt(urlParams.get('id')) || 1; // 기본값 1
+function App() {
+    const [currentIndex, setCurrentIndex] = React.useState(0);
+    const [phase, setPhase] = React.useState('input'); // 'input', 'result', 'end'
+    const [inputValue, setInputValue] = React.useState('');
+    const [isCorrect, setIsCorrect] = React.useState(false);
+    const [score, setScore] = React.useState(0);
 
-// 데이터 매핑
-const currentQuiz = QUIZ_DATA.find(q => q.id === quizId) || QUIZ_DATA[0];
+    const currentPokemon = POKEMON_DATA[currentIndex];
 
-document.getElementById('detailImg').src = currentQuiz.image;
-document.getElementById('detailTitle').textContent = currentQuiz.title;
-document.getElementById('detailDesc').innerText = currentQuiz.description;
+    const handleSubmit = (e) => {
+        e.preventDefault();
+        if (!inputValue.trim()) return;
 
-// 추천 퀴즈 렌더링 (현재 퀴즈 제외)
-const recommendList = document.getElementById('recommendList');
-const recommendations = QUIZ_DATA.filter(q => q.id !== currentQuiz.id).slice(0, 4);
+        const checkCorrect = inputValue.replace(/\s/g, '') === currentPokemon.name;
+        setIsCorrect(checkCorrect);
+        
+        if (checkCorrect) setScore(prev => prev + 1);
+        setPhase('result');
+    };
 
-recommendations.forEach(rec => {
-  const div = document.createElement('div');
-  div.className = 'rec-card';
-  div.innerHTML = `
-    <img src="${rec.image}" alt="">
-    <div class="rec-info">
-      <h4>${rec.title}</h4>
-      <p>${rec.description}</p>
-    </div>
-  `;
-  div.addEventListener('click', () => {
-    window.location.href = `quiz.html?id=${rec.id}`;
-  });
-  recommendList.appendChild(div);
-});
+    const handleNext = () => {
+        if (currentIndex + 1 < POKEMON_DATA.length) {
+            setCurrentIndex(prev => prev + 1);
+            setPhase('input');
+            setInputValue('');
+        } else {
+            setPhase('end');
+        }
+    };
 
-// 타이머 UI 상호작용
-const timerNodes = document.querySelectorAll('.timer-node');
-timerNodes.forEach(node => {
-  node.addEventListener('click', () => {
-    timerNodes.forEach(n => {
-      n.classList.remove('active');
-      n.querySelector('.node-label').classList.remove('active-label');
-    });
-    node.classList.add('active');
-    node.querySelector('.node-label').classList.add('active-label');
-  });
-});
+    return (
+        <div className="flex flex-col items-center justify-center w-full max-w-2xl px-4 relative h-full">
+            <button 
+                onClick={() => window.location.href = 'index.html'} 
+                className="absolute top-8 right-4 w-10 h-10 bg-white/10 hover:bg-white/20 rounded-full text-white/70 hover:text-white flex items-center justify-center transition-colors"
+                title="메인으로 돌아가기"
+            >
+                <i className="fa-solid fa-xmark text-xl"></i>
+            </button>
+
+            {phase !== 'end' && (
+                <div className="absolute top-8 text-white/50 font-medium tracking-widest text-sm">
+                    문제 {currentIndex + 1} / 10
+                </div>
+            )}
+
+            {phase === 'end' ? (
+                <div className="text-center bg-white/10 backdrop-blur-md p-10 rounded-2xl shadow-xl border border-white/20">
+                    <h2 className="text-4xl font-bold text-white mb-4">퀴즈 완료!</h2>
+                    <p className="text-2xl text-white mb-8">
+                        10문제 중 <span className="text-yellow-400 font-bold">{score}</span>문제를 맞췄습니다!
+                    </p>
+                    <div className="flex gap-4 justify-center">
+                        <button 
+                            onClick={() => window.location.href = 'index.html'}
+                            className="bg-white/20 hover:bg-white/30 text-white px-6 py-3 rounded-lg font-bold text-lg transition-colors"
+                        >
+                            메인 화면으로
+                        </button>
+                        <button 
+                            onClick={() => window.location.reload()}
+                            className="bg-[#8640f1] hover:bg-[#7435d6] text-white px-6 py-3 rounded-lg font-bold text-lg transition-colors"
+                        >
+                            다시하기
+                        </button>
+                    </div>
+                </div>
+            ) : (
+                <div className="flex flex-col items-center w-full">
+                    <div className="w-64 h-64 md:w-80 md:h-80 mb-12 flex justify-center items-center">
+                        <img 
+                            src={currentPokemon.img} 
+                            alt="포켓몬" 
+                            className="pokemon-img w-full h-full object-contain"
+                            draggable="false"
+                        />
+                    </div>
+
+                    {phase === 'input' && (
+                        <form onSubmit={handleSubmit} className="flex flex-row items-center justify-center w-full max-w-md gap-3">
+                            <input 
+                                type="text" 
+                                autoFocus
+                                value={inputValue}
+                                onChange={(e) => setInputValue(e.target.value)}
+                                placeholder="이름을 입력하세요"
+                                className="w-64 h-12 px-4 rounded-sm border-none outline-none text-gray-800 font-bold text-lg shadow-lg focus:ring-4 focus:ring-white/30 transition-all"
+                            />
+                            <button 
+                                type="submit" 
+                                className="w-12 h-12 bg-[#8640f1] hover:bg-[#7435d6] flex items-center justify-center rounded-sm text-white shadow-lg transition-colors"
+                            >
+                                <i className="fa-solid fa-chevron-right text-lg"></i>
+                            </button>
+                        </form>
+                    )}
+
+                    {phase === 'result' && (
+                        <div className="flex flex-col items-center justify-center space-y-4">
+                            <div className="flex items-center gap-2 font-bold text-lg">
+                                {isCorrect ? (
+                                    <>
+                                        <div className="w-5 h-5 bg-blue-500 rounded-full flex items-center justify-center">
+                                            <i className="fa-solid fa-o text-white text-[10px]"></i>
+                                        </div>
+                                        <span className="text-white tracking-wider">정답!</span>
+                                    </>
+                                ) : (
+                                    <>
+                                        <div className="w-5 h-5 bg-red-600 rounded-full flex items-center justify-center">
+                                            <i className="fa-solid fa-xmark text-white text-xs"></i>
+                                        </div>
+                                        <span className="text-white tracking-wider">오답!</span>
+                                    </>
+                                )}
+                            </div>
+                            
+                            <h1 className="text-4xl text-white font-extrabold tracking-widest drop-shadow-md">
+                                {currentPokemon.name}
+                            </h1>
+
+                            <div className="pt-2">
+                                <button 
+                                    onClick={handleNext} 
+                                    autoFocus
+                                    className="w-12 h-12 bg-[#8640f1] hover:bg-[#7435d6] flex items-center justify-center rounded-sm text-white shadow-lg transition-colors"
+                                >
+                                    <i className="fa-solid fa-chevron-right text-lg"></i>
+                                </button>
+                            </div>
+                        </div>
+                    )}
+                </div>
+            )}
+        </div>
+    );
+}
+
+const root = ReactDOM.createRoot(document.getElementById('root'));
+root.render(<App />);
